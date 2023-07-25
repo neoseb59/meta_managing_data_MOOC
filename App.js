@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView
 } from 'react-native';
+import menuItems from "./menuItems.json"
 
 const Item = ({ title, price }) => {
   return (
@@ -18,8 +19,7 @@ const Item = ({ title, price }) => {
 }
 
 export default App = () => {
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
 
   React.useEffect(() => {
     loadValues()
@@ -28,32 +28,17 @@ export default App = () => {
   const renderItem = ({ item }) => <Item title={ item.title } price={ item.price } />
 
   const loadValues = async () => {
-    try {
-      const response = await fetch(
-        'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu-items-by-category.json'
-      );
-      const json = await response.json();
-      setData(json.menu);
-      console.log(json.menu);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    setData(menuItems.menu)
   }
 
   return (
     <SafeAreaView style={ menuStyles.container }>
       <Text style={ menuStyles.headerText }>Little Lemon Menu</Text>
-      { isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <FlatList
-          data={ data }
-          keyExtractor={ ({ id }) => id }
-          renderItem={ renderItem }
-        />
-      ) }
+      <FlatList
+        style={ { backgroundColor: '#495E57', flex: 1 } }
+        data={ data }
+        renderItem={ renderItem }
+      />
     </SafeAreaView>
   );
 };
@@ -74,6 +59,7 @@ const menuStyles = StyleSheet.create({
   },
   regularText: {
     fontSize: 25,
-    padding: 10
+    padding: 10,
+    color: '#F4CE14'
   }
 });
